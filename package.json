@@ -1,0 +1,36 @@
+{
+  "name": "hire-wizerd",
+  "version": "1.0.0",
+  "description": "A Job Portal Website where a user can create job post as a recruiter and also apply for a job as a job hunter.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./backend/server.js",
+    "dev": "node --watch ./backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saied83/hire-wizerd.git"
+  },
+  "keywords": [
+    "Node",
+    "MySQL",
+    "React"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saied83/hire-wizerd/issues"
+  },
+  "homepage": "https://github.com/saied83/hire-wizerd#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^5.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.11.2"
+  }
+}
