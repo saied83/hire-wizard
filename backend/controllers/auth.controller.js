@@ -109,5 +109,41 @@ export const signUp = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {};
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if ((!username, !password)) {
+    }
+    const data = await mysqlPool.query(
+      `SELECT username, password, first_name, last_name from User where username=?`,
+      [username]
+    );
+
+    if (data[0].length <= 0) {
+      return res.status(400).json({ error: "Invalid User" });
+    }
+    const user = data[0][0];
+    const isPassCorrect = await bcryptjs.compare(
+      password,
+      user?.password || ""
+    );
+
+    if (!isPassCorrect) {
+      return res.status(400).json({
+        error: "Invalid Password",
+      });
+    }
+
+    generateTokenAndSetCookie(user.username, res);
+
+    res.status(200).json({
+      username: username,
+      fullName: user.first_name + " " + user.last_name,
+    });
+  } catch (error) {
+    console.log("Error in login controller", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 export const logout = (req, res) => {};
