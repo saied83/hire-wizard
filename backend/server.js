@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import path from "path";
 import authRoute from "./routes/auth.route.js";
+import mysqlPool from "./db/mySQL.config.js";
 
 // config
 dotenv.config();
@@ -27,6 +28,16 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "Success" });
 });
 
-app.listen(8000, () => {
-  console.log(`Server running on Port: ${PORT}`.bgCyan.black);
-});
+mysqlPool
+  .query("SELECT 1")
+  .then(() => {
+    // mysql
+    console.log("MySQL DB connected".bgBlue.black);
+    // listener
+    app.listen(PORT, () => {
+      console.log(`Running Server on Port ${process.env.PORT}`.bgMagenta.white);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
