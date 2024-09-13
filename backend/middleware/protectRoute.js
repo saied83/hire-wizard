@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import mysqlPool from "../db/mySQL.config";
+import mysqlPool from "../db/mySQL.config.js";
 
 export const protectRoute = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ export const protectRoute = async (req, res, next) => {
       return res.status(401).json({ error: "Unauthorized - Invalid Token" });
     }
     const data = await mysqlPool.query(
-      `SELECT username FROM User WHERE username=?`,
+      `SELECT username, email, phone_no, first_name, last_name, dob, gender, profile_pic FROM User WHERE username=?`,
       [decoded.username]
     );
 
@@ -25,7 +25,7 @@ export const protectRoute = async (req, res, next) => {
     }
     const user = data[0][0];
 
-    req.user = user.username;
+    req.user = user;
 
     next();
   } catch (error) {

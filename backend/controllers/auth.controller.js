@@ -2,41 +2,42 @@ import bcryptjs from "bcryptjs";
 import mysqlPool from "../db/mySQL.config.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
+export const formatTime = (isoTime) => {
+  const date = new Date(isoTime);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export const signUp = async (req, res) => {
   try {
     // get all fields from req.body
     const {
       username,
       password,
-      confirmPassword,
+      confirm_password,
       bio,
       email,
-      phoneNo,
-      firstName,
-      lastName,
+      phone_no,
+      first_name,
+      last_name,
       dob,
       gender,
     } = req.body;
 
-    const formatTime = (isoTime) => {
-      const date = new Date(isoTime);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    };
     const time_stamp = formatTime(new Date());
 
     // check if any fields is null or undefined
     if (
       !username ||
       !password ||
-      !confirmPassword ||
+      !confirm_password ||
       !bio ||
       !email ||
-      !phoneNo ||
-      !firstName ||
-      !lastName ||
+      !phone_no ||
+      !first_name ||
+      !last_name ||
       !dob ||
       !gender
     ) {
@@ -44,7 +45,7 @@ export const signUp = async (req, res) => {
     }
 
     // check if password and confirmPassword is same
-    if (password !== confirmPassword) {
+    if (password !== confirm_password) {
       return res.status(400).json({ error: "Passwords don't match" });
     }
 
@@ -66,41 +67,58 @@ export const signUp = async (req, res) => {
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
 
+    // generate profile picture
+
+    // https://avatar-placeholder.iran.liara.run/
+
+    const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
+    const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+    const profile_pic = gender === "male" ? boyProfilePic : girlProfilePic;
+
     // create new user in sql
     const connection = await mysqlPool.getConnection();
     try {
       await connection.beginTransaction();
       const [result, fields] = await connection.query(
-        `INSERT INTO User (username, password, bio, email, phone_no, time_stamp, first_name, last_name, dob, gender)
-   VALUES (?,?,?,?,?,?,?,?,?,?)`,
+        `INSERT INTO User ( username, password, bio, email, phone_no, time_stamp, first_name, last_name, dob, gender, profile_pic)
+   VALUES (?,?,?,?,?,?,?,?,?,?, ?)`,
         [
           username,
           hashedPassword,
           bio,
           email,
-          phoneNo,
+          phone_no,
           time_stamp,
-          firstName,
-          lastName,
+          first_name,
+          last_name,
           formatTime(dob),
           gender,
+          profile_pic,
         ]
       );
-      await connection.commit();
 
       if (result) {
         //generate JWT here
         generateTokenAndSetCookie(username, res);
       }
+      await connection.commit();
 
       res.status(201).json({
-        username: username,
-        fullName: firstName + " " + lastName,
+        username,
+        first_name,
+        last_name,
+        gender,
+        email,
+        phone_no,
+        profile_pic,
       });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
-      console.log(`Error in data insertion`, error.message);
+      console.log(
+        `Error in signup controller -> data insertion`,
+        error.message
+      );
       res.status(500).json({ error: "Internal Server Error" });
     }
   } catch (error) {
@@ -116,7 +134,7 @@ export const login = async (req, res) => {
     if ((!username, !password)) {
     }
     const data = await mysqlPool.query(
-      `SELECT username, password, first_name, last_name from User where username=?`,
+      `SELECT username, password, first_name, last_name, email, phone_no, profile_pic, gender from User where username=?`,
       [username]
     );
 
@@ -138,8 +156,13 @@ export const login = async (req, res) => {
     generateTokenAndSetCookie(user.username, res);
 
     res.status(200).json({
-      username: username,
-      fullName: user.first_name + " " + user.last_name,
+      username: user.username,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      gender: user.gender,
+      email: user.email,
+      phone_no: user.phone_no,
+      profile_pic: user.profile_pic,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
