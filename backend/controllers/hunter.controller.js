@@ -71,10 +71,28 @@ const getAllHunter = async (req, res) => {
     const allHunter = await mysqlPool.query(`SELECT * FROM JobHunter`);
     const allHunterProfile = allHunter[0];
 
-    const allHunters = allHunterProfile.map(async (profile) => {
-      const skillData = await mysqlPool.query(`SELECT `);
-      return {};
+    const hunterProfile = allHunterProfile.map(async (profile) => {
+      const skillData = await mysqlPool.query(
+        `SELECT skill_name, years_exp FROM H_Skill WHERE h_username=?`,
+        [profile.h_username]
+      );
+      const skills = skillData[0];
+
+      const projectData = mysqlPool.query(
+        `SELECT title, p_link, p_desc, technology FROM H_Project WHERE h_username=?`,
+        [profile.h_username]
+      );
+
+      const projects = projectData[0];
+      return { ...profile, skills, projects };
     });
+
+    let jobHunters = [];
+    for (let i = 0; i < hunterProfile.length; i++) {
+      await hunterProfile[i].then((data) => jobHunters.push(data));
+    }
+
+    res.status(200).json(jobHunters);
   } catch (error) {
     console.log("Error in getAllHunter controller", error.message);
     res.status(500).json({ error: "Internal Server Error" });
