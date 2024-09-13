@@ -2,8 +2,15 @@ import mysqlPool from "../db/mySQL.config.js";
 
 const addHunter = async (req, res) => {
   try {
-    const { city, zip_code, street, country, working_role, skills, projects } =
-      req.body;
+    const {
+      h_city,
+      h_zip_code,
+      h_street,
+      h_country,
+      h_working_role,
+      skills,
+      projects,
+    } = req.body;
     const user_name = req.user.username;
 
     // check existing job hunter user
@@ -21,7 +28,7 @@ const addHunter = async (req, res) => {
         await connection.beginTransaction();
         await connection.query(
           `INSERT INTO JobHunter (h_username, h_city, h_street, h_zip_code, h_country, h_working_role) VALUES (?,?,?,?,?,?)`,
-          [user_name, city, street, zip_code, country, working_role]
+          [user_name, h_city, h_street, h_zip_code, h_country, h_working_role]
         );
 
         skills.map(async (skill) => {
@@ -46,7 +53,7 @@ const addHunter = async (req, res) => {
 
         await connection.commit();
         res.status(200).json({
-          message: "User Information Updated",
+          message: "User information added",
         });
       } catch (error) {
         await connection.rollback();
@@ -78,7 +85,7 @@ const getAllHunter = async (req, res) => {
       );
       const skills = skillData[0];
 
-      const projectData = mysqlPool.query(
+      const projectData = await mysqlPool.query(
         `SELECT title, p_link, p_desc, technology FROM H_Project WHERE h_username=?`,
         [profile.h_username]
       );
@@ -102,7 +109,6 @@ const getAllHunter = async (req, res) => {
 const getSingleHunter = async (req, res) => {
   try {
     const user_name = req.params.username;
-    const jobHunter = {};
 
     const profileData = await mysqlPool.query(
       `
@@ -110,7 +116,7 @@ const getSingleHunter = async (req, res) => {
       [user_name]
     );
 
-    const userProfileData = profileData[0][0];
+    const userProfileData = profileData[0];
     if (!userProfileData) {
       return res.status(404).json({ error: "No record found" });
     }
@@ -130,22 +136,95 @@ const getSingleHunter = async (req, res) => {
 
     const userProjectData = projectData[0];
 
-    jobHunter.username = userProfileData.h_username;
-    jobHunter.city = userProfileData.h_city;
-    jobHunter.zip_code = userProfileData.h_zip_code;
-    jobHunter.county = userProfileData.h_country;
-    jobHunter.working_role = userProfileData.h_working_role;
-    jobHunter.skills = userSkillData;
-    jobHunter.projects = userProjectData;
-
-    res.status(200).json(jobHunter);
+    res
+      .status(200)
+      .json({ ...userProfileData[0], userSkillData, userProjectData });
   } catch (error) {
     console.log("Error in getSingleHunter controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-const updateHunterProfile = async (req, res) => {};
+const updateHunterProfile = async (req, res) => {
+  try {
+    const {
+      h_city,
+      h_zip_code,
+      h_street,
+      h_country,
+      h_working_role,
+      skills,
+      projects,
+    } = req.body;
+    const user_name = req.user.username;
+
+    // check existing job hunter user
+
+    const data = await mysqlPool.query(
+      `SELECT h_username FROM JobHunter WHERE h_username=?`,
+      [user_name]
+    );
+
+    const checkedUserName = data[0][0];
+    if (checkedUserName) {
+      // add new job hunter
+      const connection = await mysqlPool.getConnection();
+      try {
+        await connection.beginTransaction();
+        await connection.query(
+          `UPDATE JobHunter SET h_city=?, h_street=?, h_zip_code=?, h_country=?, h_working_role=? WHERE h_username=?`,
+          [h_city, h_street, h_zip_code, h_country, h_working_role, user_name]
+        );
+
+        await connection.query(`DELETE FROM H_Skill WHERE h_username=?`, [
+          user_name,
+        ]);
+
+        skills.map(async (skill) => {
+          await connection.query(
+            `INSERT INTO H_Skill (h_username, skill_name, years_exp) VALUES (?,?,?)`,
+            [user_name, skill.skill_name, skill.years_exp]
+          );
+        });
+
+        await connection.query(`DELETE FROM H_Project WHERE h_username=?`, [
+          user_name,
+        ]);
+
+        projects.map(async (project) => {
+          await connection.query(
+            `INSERT INTO H_Project (h_username, title, p_link, p_desc, technology) VALUES (?,?,?, ?,?)`,
+            [
+              user_name,
+              project.title,
+              project.p_link,
+              project.p_desc,
+              project.technology,
+            ]
+          );
+        });
+
+        await connection.commit();
+        res.status(200).json({
+          message: "User Information Updated",
+        });
+      } catch (error) {
+        await connection.rollback();
+        mysqlPool.releaseConnection();
+        console.log(
+          `Error in updateHunterProfile controller -> data update`,
+          error.message
+        );
+        res.status(500).json({ error: "Internal Server Error" });
+      }
+    } else {
+      return res.status(400).json({ error: "Add user information first" });
+    }
+  } catch (error) {
+    console.log("Error in addHunterProfile controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 const deleteHunter = async (req, res) => {
   try {
