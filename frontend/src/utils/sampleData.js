@@ -1,4 +1,4 @@
-const users = [
+export const users = [
   {
     username: "johndoe90",
     password: "BCfTTzpUvo3tkXjD81C5sQ",
@@ -25,7 +25,7 @@ const users = [
   },
 ];
 
-const job_hunters = [
+export const job_hunters = [
   {
     username: "jhondoe90",
     city: "Dhaka",
@@ -64,7 +64,7 @@ const job_hunters = [
   },
 ];
 
-const recruiter = [
+export const recruiter = [
   {
     username: "recruiter90",
     designation: "Hiring Manager",
@@ -79,7 +79,7 @@ const recruiter = [
   },
 ];
 
-const JobPosts = [
+export const JobPosts = [
   {
     id: 2345,
     createdBy: "recruiter1 name",
