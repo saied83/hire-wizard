@@ -1,6 +1,6 @@
-# Hire Wizerd
+# Hire Wizard
 
-Hire Wizerd is a job finder web application built using `Express.js` and `Node.js`. It connects job seekers (Job Hunters) and recruiters, enabling job applications, posting of new job offers, and management of job applications. It implements secure authentication using `bcryptjs` and `JWT` for session management and includes MySQL for database management.
+Hire Wizard is a job finder web application built using `Express.js` and `Node.js`. It connects job seekers (Job Hunters) and recruiters, enabling job applications, posting of new job offers, and management of job applications. It implements secure authentication using `bcryptjs` and `JWT` for session management and includes MySQL for database management.
 
 ## Features
 
@@ -23,13 +23,13 @@ Hire Wizerd is a job finder web application built using `Express.js` and `Node.j
 Clone this directory
 
 ```bash
-git clone https://github.com/saied83/hire-wizerd/
+git clone https://github.com/saied83/hire-wizard/
 ```
 
 Go to the client directory
 
 ```bash
-cd hire-wizerd
+cd hire-wizard
 ```
 
 Install dependencies
@@ -46,12 +46,12 @@ Login to MySQL
   sudo mysql -u root -p
 ```
 
-Create database named **hire_wizerd** and follow these query
+Create database named **hire_wizard** and follow these query
 
 ```bash
 
-CREATE DATABASE hire_wizerd;
-USE hire_wizerd;
+CREATE DATABASE hire_wizard;
+USE hire_wizard;
 
 CREATE TABLE User (
     username VARCHAR(50) PRIMARY KEY,
@@ -215,7 +215,7 @@ To run this project, you will need to add the following environment variables to
 
 `DB_PASSWORD`= **Your MySQL Root Password**
 
-`DB_NAME`=hire_wizerd
+`DB_NAME`=hire_wizard
 
 `JWT_SECRET`=Y8hxiWObFzYOIepLVQoR5RBuQChQ20coFrhkPMqzGQw=
 
@@ -236,4 +236,4 @@ http://localhost:8000
 
 ## Database Schema
 
-![](https://github.com/saied83/hire-wizerd/blob/main/hire-wizerd-schema-v2.png?raw=true)
+![](https://github.com/saied83/hire-wizard/blob/main/hire-wizard-schema-v2.png?raw=true)
