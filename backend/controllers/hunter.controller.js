@@ -53,13 +53,13 @@ const addHunter = async (req, res) => {
 
         await connection.commit();
         res.status(200).json({
-          message: "User information added",
+          message: "JobHunter user information added",
         });
       } catch (error) {
         await connection.rollback();
         mysqlPool.releaseConnection();
         console.log(
-          `Error in editUser controller -> data update`,
+          `Error in addHunter controller -> data update`,
           error.message
         );
         res.status(500).json({ error: "Internal Server Error" });
@@ -75,19 +75,22 @@ const addHunter = async (req, res) => {
 
 const getAllHunter = async (req, res) => {
   try {
-    const allHunter = await mysqlPool.query(`SELECT * FROM JobHunter`);
+    const allHunter = await mysqlPool.query(
+      `SELECT j.h_username, u.bio, u.email, u.phone_no, u.time_stamp, u.first_name, u.last_name, u.dob, u.gender, u.profile_pic, h_city, h_street, h_zip_code, h_country, h_working_role FROM JobHunter j JOIN User u on u.username=j.h_username`
+    );
+
     const allHunterProfile = allHunter[0];
 
     const hunterProfile = allHunterProfile.map(async (profile) => {
       const skillData = await mysqlPool.query(
         `SELECT skill_name, years_exp FROM H_Skill WHERE h_username=?`,
-        [profile.h_username]
+        [profile.username]
       );
       const skills = skillData[0];
 
       const projectData = await mysqlPool.query(
         `SELECT title, p_link, p_desc, technology FROM H_Project WHERE h_username=?`,
-        [profile.h_username]
+        [profile.username]
       );
 
       const projects = projectData[0];
@@ -112,7 +115,7 @@ const getSingleHunter = async (req, res) => {
 
     const profileData = await mysqlPool.query(
       `
-            SELECT * FROM JobHunter WHERE h_username=?`,
+            SELECT j.h_username, u.bio, u.email, u.phone_no, u.time_stamp, u.first_name, u.last_name, u.dob, u.gender, u.profile_pic, h_city, h_street, h_zip_code, h_country, h_working_role FROM JobHunter j JOIN User u on u.username=j.h_username WHERE h_username=?`,
       [user_name]
     );
 
@@ -218,7 +221,9 @@ const updateHunterProfile = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
       }
     } else {
-      return res.status(400).json({ error: "Add user information first" });
+      return res
+        .status(400)
+        .json({ error: "Add job hunter information first" });
     }
   } catch (error) {
     console.log("Error in addHunterProfile controller", error.message);
@@ -252,7 +257,10 @@ const deleteHunter = async (req, res) => {
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
-      console.log("Error in deleteHunter controller -> delete data");
+      console.log(
+        "Error in deleteHunter controller -> delete data",
+        error.message
+      );
       res.status(500).json({ message: "db error" });
     }
   } catch (error) {
