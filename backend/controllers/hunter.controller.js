@@ -84,13 +84,13 @@ const getAllHunter = async (req, res) => {
     const hunterProfile = allHunterProfile.map(async (profile) => {
       const skillData = await mysqlPool.query(
         `SELECT skill_name, years_exp FROM H_Skill WHERE h_username=?`,
-        [profile.username]
+        [profile.h_username]
       );
       const skills = skillData[0];
 
       const projectData = await mysqlPool.query(
         `SELECT title, p_link, p_desc, technology FROM H_Project WHERE h_username=?`,
-        [profile.username]
+        [profile.h_username]
       );
 
       const projects = projectData[0];
@@ -139,9 +139,11 @@ const getSingleHunter = async (req, res) => {
 
     const userProjectData = projectData[0];
 
-    res
-      .status(200)
-      .json({ ...userProfileData[0], userSkillData, userProjectData });
+    res.status(200).json({
+      ...userProfileData[0],
+      skills: userSkillData,
+      project: userProjectData,
+    });
   } catch (error) {
     console.log("Error in getSingleHunter controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });

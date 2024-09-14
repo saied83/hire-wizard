@@ -21,6 +21,7 @@ export const protectRoute = async (req, res, next) => {
     );
 
     if (data[0].length <= 0) {
+      console.log("validation error in protectRoute");
       return res.status(404).json({ error: "User not found" });
     }
     const user = data[0][0];

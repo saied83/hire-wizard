@@ -51,11 +51,11 @@ export const signUp = async (req, res) => {
 
     // check the existence of username
     try {
-      const [result, fields] = await mysqlPool.query(
+      const data = await mysqlPool.query(
         `SELECT username FROM User WHERE username=?`,
         [username]
       );
-      if (result.length !== 0)
+      if (data[0].length !== 0)
         return res.status(400).json({ error: "User already exists" });
     } catch (error) {
       mysqlPool.releaseConnection();
@@ -97,11 +97,27 @@ export const signUp = async (req, res) => {
         ]
       );
 
-      if (result) {
-        //generate JWT here
-        generateTokenAndSetCookie(username, res);
-      }
       await connection.commit();
+
+      const data1 = await mysqlPool.query(
+        `SELECT h_username FROM JobHunter WHERE h_username=?`,
+        [username]
+      );
+      const data2 = await mysqlPool.query(
+        `SELECT r_username FROM Recruiter WHERE r_username=?`,
+        [username]
+      );
+
+      let isHunter = false;
+      let isRecruiter = false;
+
+      if (data1[0][0].length > 0) {
+        isHunter = true;
+      }
+      if (data2[0][0].length > 0) {
+        isRecruiter = true;
+      }
+      generateTokenAndSetCookie(username, res);
 
       res.status(201).json({
         username,
@@ -111,6 +127,8 @@ export const signUp = async (req, res) => {
         email,
         phone_no,
         profile_pic,
+        isHunter,
+        isRecruiter,
       });
     } catch (error) {
       await connection.rollback();
@@ -154,6 +172,24 @@ export const login = async (req, res) => {
     }
 
     generateTokenAndSetCookie(user.username, res);
+    const data1 = await mysqlPool.query(
+      `SELECT h_username FROM JobHunter WHERE h_username=?`,
+      [username]
+    );
+    const data2 = await mysqlPool.query(
+      `SELECT r_username FROM Recruiter WHERE r_username=?`,
+      [username]
+    );
+
+    let isHunter = false;
+    let isRecruiter = false;
+
+    if (data1[0].length > 0) {
+      isHunter = true;
+    }
+    if (data2[0].length > 0) {
+      isRecruiter = true;
+    }
 
     res.status(200).json({
       username: user.username,
@@ -163,6 +199,8 @@ export const login = async (req, res) => {
       email: user.email,
       phone_no: user.phone_no,
       profile_pic: user.profile_pic,
+      isHunter,
+      isRecruiter,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);

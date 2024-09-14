@@ -9,6 +9,7 @@ import mysqlPool from "./db/mySQL.config.js";
 import userRoute from "./routes/user.route.js";
 import jobHunterRoute from "./routes/hunter.route.js";
 import recruiterRoute from "./routes/recruiter.route.js";
+import jobRoute from "./routes/job.route.js";
 
 // config
 dotenv.config();
@@ -26,9 +27,10 @@ app.use(morgan("dev"));
 
 // routes
 app.use("/api/v1/auth", authRoute);
-app.use("/api/v1/user", userRoute);
-app.use("/api/v1/hunter", jobHunterRoute);
-app.use("/api/v1/recruiter", recruiterRoute);
+app.use("/api/v1/users", userRoute);
+app.use("/api/v1/hunters", jobHunterRoute);
+app.use("/api/v1/recruiters", recruiterRoute);
+app.use("/api/v1/jobs", jobRoute);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Success" });
