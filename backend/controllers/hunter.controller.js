@@ -53,6 +53,7 @@ const addHunter = async (req, res) => {
 
         await connection.commit();
         res.status(200).json({
+          status: "success",
           message: "JobHunter user information added",
         });
       } catch (error) {
@@ -62,14 +63,18 @@ const addHunter = async (req, res) => {
           `Error in addHunter controller -> data update`,
           error.message
         );
-        res.status(500).json({ error: "Internal Server Error" });
+        res
+          .status(500)
+          .json({ status: "failure", error: "Internal Server Error" });
       }
     } else {
-      return res.status(400).json({ error: "Job Hunter already exists" });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Job Hunter already exists" });
     }
   } catch (error) {
     console.log("Error in addHunter controller", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -102,10 +107,16 @@ const getAllHunter = async (req, res) => {
       await hunterProfile[i].then((data) => jobHunters.push(data));
     }
 
-    res.status(200).json(jobHunters);
+    res
+      .status(200)
+      .json({
+        status: "success",
+        message: "parse all job hunter successfully",
+        data: jobHunters,
+      });
   } catch (error) {
     console.log("Error in getAllHunter controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -121,7 +132,9 @@ const getSingleHunter = async (req, res) => {
 
     const userProfileData = profileData[0];
     if (!userProfileData) {
-      return res.status(404).json({ error: "No record found" });
+      return res
+        .status(404)
+        .json({ status: "failure", error: "No record found" });
     }
 
     const skillData = await mysqlPool.query(
@@ -140,13 +153,19 @@ const getSingleHunter = async (req, res) => {
     const userProjectData = projectData[0];
 
     res.status(200).json({
-      ...userProfileData[0],
-      skills: userSkillData,
-      project: userProjectData,
+      status: "success",
+      message: "parse hunter data successfully",
+      data: {
+        ...userProfileData[0],
+        skills: userSkillData,
+        project: userProjectData,
+      },
     });
   } catch (error) {
     console.log("Error in getSingleHunter controller", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    res
+      .status(500)
+      .json({ status: "failure", message: "Internal Server Error" });
   }
 };
 
@@ -210,9 +229,9 @@ const updateHunterProfile = async (req, res) => {
         });
 
         await connection.commit();
-        res.status(200).json({
-          message: "User Information Updated",
-        });
+        res
+          .status(200)
+          .json({ status: "success", message: "User Information Updated" });
       } catch (error) {
         await connection.rollback();
         mysqlPool.releaseConnection();
@@ -220,16 +239,18 @@ const updateHunterProfile = async (req, res) => {
           `Error in updateHunterProfile controller -> data update`,
           error.message
         );
-        res.status(500).json({ error: "Internal Server Error" });
+        res
+          .status(500)
+          .json({ status: "failure", error: "Internal Server Error" });
       }
     } else {
       return res
         .status(400)
-        .json({ error: "Add job hunter information first" });
+        .json({ status: "failure", error: "Add job hunter information first" });
     }
   } catch (error) {
     console.log("Error in addHunterProfile controller", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -243,7 +264,10 @@ const deleteHunter = async (req, res) => {
     );
     const user = data[0][0];
 
-    if (!user) return res.status(400).json({ error: "Hunter User not Exist" });
+    if (!user)
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Hunter User not Exist" });
 
     //delete job hunter profile
     const connection = await mysqlPool.getConnection();
@@ -255,7 +279,10 @@ const deleteHunter = async (req, res) => {
       await connection.commit();
       return res
         .status(200)
-        .json({ message: "Hunter User delete successfully" });
+        .json({
+          status: "success",
+          message: "Hunter User delete successfully",
+        });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
@@ -263,11 +290,11 @@ const deleteHunter = async (req, res) => {
         "Error in deleteHunter controller -> delete data",
         error.message
       );
-      res.status(500).json({ message: "db error" });
+      res.status(500).json({ status: "failure", message: "db error" });
     }
   } catch (error) {
     console.log("Error in deleteHunter controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 

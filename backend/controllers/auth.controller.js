@@ -41,12 +41,16 @@ export const signUp = async (req, res) => {
       !dob ||
       !gender
     ) {
-      return res.status(400).json({ error: "Doesn't provide all fields" });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Doesn't provide all fields" });
     }
 
     // check if password and confirmPassword is same
     if (password !== confirm_password) {
-      return res.status(400).json({ error: "Passwords don't match" });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Passwords don't match" });
     }
 
     // check the existence of username
@@ -55,12 +59,16 @@ export const signUp = async (req, res) => {
         `SELECT username FROM User WHERE username=?`,
         [username]
       );
-      if (data[0].length !== 0)
-        return res.status(400).json({ error: "User already exists" });
+      if (data[0][0]?.username)
+        return res
+          .status(400)
+          .json({ status: "failure", error: "User already exists" });
     } catch (error) {
       mysqlPool.releaseConnection();
       console.log("Error in signup controller", error.message);
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ status: "failure", error: "Internal Server Error" });
     }
 
     // HASH PASSWORD HERE
@@ -111,24 +119,28 @@ export const signUp = async (req, res) => {
       let isHunter = false;
       let isRecruiter = false;
 
-      if (data1[0][0].length > 0) {
+      if (data1[0][0]?.username > 0) {
         isHunter = true;
       }
-      if (data2[0][0].length > 0) {
+      if (data2[0][0]?.username > 0) {
         isRecruiter = true;
       }
       generateTokenAndSetCookie(username, res);
 
       res.status(201).json({
-        username,
-        first_name,
-        last_name,
-        gender,
-        email,
-        phone_no,
-        profile_pic,
-        isHunter,
-        isRecruiter,
+        status: "success",
+        message: "signup successfully",
+        data: {
+          username,
+          first_name,
+          last_name,
+          gender,
+          email,
+          phone_no,
+          profile_pic,
+          isHunter,
+          isRecruiter,
+        },
       });
     } catch (error) {
       await connection.rollback();
@@ -137,11 +149,13 @@ export const signUp = async (req, res) => {
         `Error in signup controller -> data insertion`,
         error.message
       );
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ status: "failure", error: "Internal Server Error" });
     }
   } catch (error) {
     console.log(`Error in signup controller`, error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -157,7 +171,7 @@ export const login = async (req, res) => {
     );
 
     if (data[0].length <= 0) {
-      return res.status(400).json({ error: "Invalid User" });
+      return res.status(400).json({ status: "failure", error: "Invalid User" });
     }
     const user = data[0][0];
     const isPassCorrect = await bcryptjs.compare(
@@ -166,9 +180,9 @@ export const login = async (req, res) => {
     );
 
     if (!isPassCorrect) {
-      return res.status(400).json({
-        error: "Invalid Password",
-      });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Invalid Password" });
     }
 
     generateTokenAndSetCookie(user.username, res);
@@ -192,27 +206,31 @@ export const login = async (req, res) => {
     }
 
     res.status(200).json({
-      username: user.username,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      gender: user.gender,
-      email: user.email,
-      phone_no: user.phone_no,
-      profile_pic: user.profile_pic,
-      isHunter,
-      isRecruiter,
+      status: "success",
+      message: "user login successfully",
+      data: {
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        gender: user.gender,
+        email: user.email,
+        phone_no: user.phone_no,
+        profile_pic: user.profile_pic,
+        isHunter,
+        isRecruiter,
+      },
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 export const logout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).json({ message: "logout successfully" });
+    res.status(200).json({ status: "success", message: "logout successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };

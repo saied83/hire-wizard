@@ -28,6 +28,7 @@ VALUES
 
         await connection.commit();
         res.status(200).json({
+          status: "success",
           message: "Recruiter user information added",
         });
       } catch (error) {
@@ -37,14 +38,18 @@ VALUES
           `Error in addRecruiter controller -> data update`,
           error.message
         );
-        res.status(500).json({ error: "Internal Server Error" });
+        res
+          .status(500)
+          .json({ status: "failure", error: "Internal Server Error" });
       }
     } else {
-      return res.status(400).json({ error: "Job Recruiter already exists" });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Job Recruiter already exists" });
     }
   } catch (error) {
     console.log("Error in addRecruiter controller", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -80,10 +85,16 @@ const getAllRecruiter = async (req, res) => {
       };
     });
 
-    res.status(200).json(hunterProfile);
+    res
+      .status(200)
+      .json({
+        status: "success",
+        message: "parse all recruiter information successfully",
+        data: hunterProfile,
+      });
   } catch (error) {
     console.log("Error in getAllRecruiter controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -99,7 +110,9 @@ const getSingleRecruiter = async (req, res) => {
 
     const userProfileData = profileData[0];
     if (!userProfileData) {
-      return res.status(404).json({ error: "No record found" });
+      return res
+        .status(404)
+        .json({ status: "failure", error: "No record found" });
     }
     const recruiterData = userProfileData[0];
 
@@ -124,10 +137,18 @@ const getSingleRecruiter = async (req, res) => {
       },
     };
 
-    res.status(200).json(Recruiter);
+    res
+      .status(200)
+      .json({
+        status: "success",
+        message: "parse recruiter info successfully",
+        data: Recruiter,
+      });
   } catch (error) {
     console.log("Error in getSingleHunter controller", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    res
+      .status(500)
+      .json({ status: "failure", message: "Internal Server Error" });
   }
 };
 
@@ -156,9 +177,9 @@ const updateRecruiterProfile = async (req, res) => {
         );
 
         await connection.commit();
-        res.status(200).json({
-          message: "User Information Updated",
-        });
+        res
+          .status(200)
+          .json({ status: "success", message: "User Information Updated" });
       } catch (error) {
         await connection.rollback();
         mysqlPool.releaseConnection();
@@ -166,14 +187,20 @@ const updateRecruiterProfile = async (req, res) => {
           `Error in updateHunterProfile controller -> data update`,
           error.message
         );
-        res.status(500).json({ error: "Internal Server Error" });
+        res
+          .status(500)
+          .json({ status: "failure", error: "Internal Server Error" });
       }
     } else {
-      return res.status(400).json({ error: "Add recruiter information first" });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Add recruiter information first" });
     }
   } catch (error) {
     console.log("Error in addRecruiterProfile controller", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    res
+      .status(500)
+      .json({ status: "failure", message: "Internal Server Error" });
   }
 };
 
@@ -188,7 +215,9 @@ const deleteRecruiter = async (req, res) => {
     const user = data[0][0];
 
     if (!user)
-      return res.status(400).json({ error: "Recruiter User not Exist" });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Recruiter User not Exist" });
 
     //delete job hunter profile
     const connection = await mysqlPool.getConnection();
@@ -198,9 +227,10 @@ const deleteRecruiter = async (req, res) => {
         user_name,
       ]);
       await connection.commit();
-      return res
-        .status(200)
-        .json({ message: "Recruiter User delete successfully" });
+      return res.status(200).json({
+        status: "success",
+        message: "Recruiter User delete successfully",
+      });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
@@ -208,11 +238,11 @@ const deleteRecruiter = async (req, res) => {
         "Error in deleteRecruiter controller -> delete data",
         error.message
       );
-      res.status(500).json({ message: "db error" });
+      res.status(500).json({ status: "failure", message: "db error" });
     }
   } catch (error) {
     console.log("Error in deleteRecruiter controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 

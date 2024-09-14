@@ -11,12 +11,20 @@ const getAllUsers = async (req, res) => {
     const users = data[0];
 
     if (!users) {
-      return res.status(404).json({ error: "Users not Found" });
+      return res
+        .status(404)
+        .json({ status: "failure", error: "Users not Found" });
     }
-    res.status(200).json(users);
+    res
+      .status(200)
+      .json({
+        status: "success",
+        message: "parse all user successfully",
+        data: users,
+      });
   } catch (error) {
     console.log("Error in getAllUsers Controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -28,15 +36,21 @@ const getSingleUser = async (req, res) => {
       [user_name]
     );
 
-    const users = data[0][0];
+    const user = data[0][0];
 
-    if (!users) {
-      return res.status(404).json({ error: "Users not Found" });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "failure", error: "Users not Found" });
     }
-    res.status(200).json(users);
+    res.status(200).json({
+      status: "success",
+      message: "parse user successfully",
+      data: user,
+    });
   } catch (error) {
     console.log("Error in getAllUsers Controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 const editUser = async (req, res) => {
@@ -56,7 +70,9 @@ const editUser = async (req, res) => {
 
     // check if password and confirmPassword is same
     if (password !== confirm_password) {
-      return res.status(400).json({ error: "Passwords don't match" });
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Passwords don't match" });
     }
 
     // gender
@@ -88,18 +104,20 @@ const editUser = async (req, res) => {
         ]
       );
       await connection.commit();
-      res.status(200).json({
-        message: "User Information Updated",
-      });
+      res
+        .status(200)
+        .json({ status: "success", message: "User Information Updated" });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
       console.log(`Error in editUser controller -> data update`, error.message);
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ status: "failure", error: "Internal Server Error" });
     }
   } catch (error) {
     console.log("Error in editUser Controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 const deleteUser = async (req, res) => {
@@ -115,9 +133,9 @@ const deleteUser = async (req, res) => {
       );
       await connection.commit();
       res.cookie("jwt", "", { maxAge: 0 });
-      res.status(200).json({
-        message: "User Deleted Successfully",
-      });
+      res
+        .status(200)
+        .json({ status: "success", message: "User Deleted Successfully" });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
@@ -125,11 +143,13 @@ const deleteUser = async (req, res) => {
         `Error in deleteUser controller -> data delete`,
         error.message
       );
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ status: "failure", error: "Internal Server Error" });
     }
   } catch (error) {
     console.log("Error in deleteUser Controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 

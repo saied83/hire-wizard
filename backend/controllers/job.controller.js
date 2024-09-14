@@ -29,10 +29,14 @@ const getSingleJob = async (req, res) => {
       applicant: applicantData[0],
     };
 
-    res.status(200).json(singleJob);
+    res.status(200).json({
+      status: "success",
+      message: "parse job successfully",
+      data: singleJob,
+    });
   } catch (error) {
     console.log("Error in getSingleJob controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -62,10 +66,14 @@ const getAllJobs = async (req, res) => {
       await allJobsPromises[i].then((data) => allJobs.push(data));
     }
 
-    res.status(200).json(allJobs);
+    res.status(200).json({
+      status: "success",
+      message: "parse all jobs successfully",
+      data: allJobs,
+    });
   } catch (error) {
     console.log("Error in getAllJobs controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -109,12 +117,12 @@ VALUES (?,?,?,?,?,?,?,?,?)`,
       );
     });
 
-    res.status(201).json({
-      message: "Job Created Successfully",
-    });
+    res
+      .status(201)
+      .json({ status: "success", message: "Job Created Successfully" });
   } catch (error) {
     console.log("Error in createJob controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -129,17 +137,21 @@ const applyIntoJobs = async (req, res) => {
       [jobId]
     );
     if (jobIdRes[0].length < 0)
-      return res.status(404).json({ error: "Job doesn't exist." });
+      return res
+        .status(404)
+        .json({ status: "failure", error: "Job doesn't exist." });
 
     await mysqlPool.query(
       `INSERT INTO Apply (job_id, h_username, name, email, CV) VALUES (?,?,?,?,?)`,
       [jobId, h_username, name, email, cv]
     );
 
-    res.status(201).json({ message: "Apply job successfully" });
+    res
+      .status(201)
+      .json({ status: "success", message: "Apply job successfully" });
   } catch (error) {
     console.log("Error in applyIntoJobs controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -190,18 +202,20 @@ const editJob = async (req, res) => {
       });
 
       await connection.commit();
-      res.status(200).json({
-        message: "Job Information Updated",
-      });
+      res
+        .status(200)
+        .json({ status: "success", message: "Job Information Updated" });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
       console.log(`Error in editJob controller -> data update`, error.message);
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ status: "failure", error: "Internal Server Error" });
     }
   } catch (error) {
     console.log("Error in editJob controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -215,7 +229,10 @@ const deleteJob = async (req, res) => {
     );
     const job = data[0][0];
 
-    if (!job) return res.status(400).json({ error: "Job not Exist" });
+    if (!job)
+      return res
+        .status(400)
+        .json({ status: "failure", error: "Job not Exist" });
 
     //delete job
     const connection = await mysqlPool.getConnection();
@@ -226,7 +243,9 @@ const deleteJob = async (req, res) => {
         [jobId, username]
       );
       await connection.commit();
-      return res.status(200).json({ message: "Job delete successfully" });
+      return res
+        .status(200)
+        .json({ status: "success", message: "Job delete successfully" });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();
@@ -234,11 +253,13 @@ const deleteJob = async (req, res) => {
         "Error in deleteJob controller -> delete data",
         error.message
       );
-      res.status(500).json({ error: "Internal Server Error" });
+      res
+        .status(500)
+        .json({ status: "failure", error: "Internal Server Error" });
     }
   } catch (error) {
     console.log("Error in deleteJob controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -249,10 +270,12 @@ const declineJob = async (req, res) => {
       `UPDATE Apply SET is_decline = TRUE WHERE job_id = ? AND h_username = ?`,
       [id, username]
     );
-    res.status(200).json({ message: "Updated decline state" });
+    res
+      .status(200)
+      .json({ status: "success", message: "Updated decline state" });
   } catch (error) {
     console.log("Error in declineJob controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
@@ -263,10 +286,12 @@ const acceptedJob = async (req, res) => {
       `UPDATE Apply SET is_accepted = TRUE WHERE job_id = ? AND h_username = ?`,
       [id, username]
     );
-    res.status(200).json({ message: "Updated accepted state" });
+    res
+      .status(200)
+      .json({ status: "success", message: "Updated accepted state" });
   } catch (error) {
     console.log("Error in acceptedJob controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: "failure", error: "Internal Server Error" });
   }
 };
 
