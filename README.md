@@ -106,6 +106,7 @@ CREATE TABLE JobPost (
     r_username VARCHAR(50),
     deadline DATE,
     time_stamp TIMESTAMP
+    FOREIGN KEY (r_username) REFERENCES Recruiter(r_username) ON DELETE CASCADE
 );
 
 CREATE TABLE Apply (
@@ -136,6 +137,7 @@ CREATE TABLE Recruiter (
     c_street VARCHAR(100),
     c_country VARCHAR(50),
     c_zip VARCHAR(20)
+    FOREIGN KEY (r_username) REFERENCES User(username) ON DELETE CASCADE
 );
 
 ```
