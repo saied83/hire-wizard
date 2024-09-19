@@ -52,11 +52,13 @@ const Signup = () => {
             />
           </div>
           <div className="flex flex-col gap-4 md:flex-row">
-            <input
-              type="date"
+            <select
+              className="py-2 px-4 text-lg text-tx bg-white  rounded-lg w-full"
               required
-              className="py-2 px-4 text-lg text-tx  rounded-lg w-full"
-            />
+            >
+              <option>Recruiter</option>
+              <option>Job Hunter</option>
+            </select>
             <select className="py-2 px-4 text-lg text-tx bg-white  rounded-lg w-full">
               <option>Male</option>
               <option>Female</option>

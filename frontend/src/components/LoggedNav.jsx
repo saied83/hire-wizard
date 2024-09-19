@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const LoggedNav = () => {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <div className="w-full h-[70px] relative bg-second  ">
@@ -12,32 +12,40 @@ const Navbar = () => {
               <img src="/logo.png" alt="" className="w-[200px] h-auto" />
             </NavLink>
             <div className="hidden md:inline-flex ">
+              {" "}
               <NavLink
                 to="/hunters"
-                className="py-2  md:px-4 lg:px-6 text-tx md:font-normal mr-2  lg:font-bold lg:text-lg   "
+                className="py-2  md:px-4 lg:px-6 text-tx md:font-normal lg:font-medium lg:text-lg   "
+              >
+                Dashboard
+                <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
+              </NavLink>
+              <NavLink
+                to="/hunters"
+                className="py-2  md:px-4 lg:px-6 text-tx md:font-normal  lg:font-medium lg:text-lg   "
               >
                 Find Talent
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/jobs"
-                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal mr-2  lg:font-bold lg:text-lg   "
+                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal  lg:font-medium lg:text-lg   "
               >
                 Jobs
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/login"
-                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal mr-2  lg:font-bold lg:text-lg   "
+                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal lg:font-medium lg:text-lg   "
               >
                 Login
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/signup"
-                className=" md:px-4 lg:px-8 ttext-tx md:font-normal   lg:font-bold lg:text-lg  rounded-full bg-primary hover:bg-ty py-2  "
+                className=" md:px-4 lg:px-8   lg:font-medium lg:text-lg  rounded-full hover:bg-red-400 hover:text-black text-white bg-tx py-2  "
               >
-                Signup
+                Logout
               </NavLink>
             </div>
             <a
@@ -64,28 +72,28 @@ const Navbar = () => {
           <NavLink
             to="/hunters"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-tx font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Find Talent
           </NavLink>
           <NavLink
             to="/jobs"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-tx font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Jobs
           </NavLink>
           <NavLink
             to="/login"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-tx font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Login
           </NavLink>
           <NavLink
             to="/signup"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-black font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Signup
           </NavLink>
@@ -95,4 +103,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default LoggedNav;
