@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   return (
-    <div className="w-full h-[60px] relative bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 ">
+    <div className="w-full h-[70px] relative bg-second  ">
       <div>
         <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
           <div className="flex justify-between items-center py-2 ">
@@ -14,48 +14,48 @@ const Navbar = () => {
             <div className="hidden md:inline-flex ">
               <NavLink
                 to="/hunters"
-                className="py-2  md:px-4 lg:px-6 text-primary md:font-normal mr-4  lg:font-bold lg:text-lg   "
+                className="py-2  md:px-4 lg:px-6 text-tx md:font-normal mr-4  lg:font-bold lg:text-lg   "
               >
                 Find Talent
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/jobs"
-                className="py-2 md:px-4 lg:px-6 text-primary md:font-normal mr-4  lg:font-bold lg:text-lg   "
+                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal mr-4  lg:font-bold lg:text-lg   "
               >
                 Jobs
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/login"
-                className="py-2 md:px-4 lg:px-6 text-primary md:font-normal mr-4  lg:font-bold lg:text-lg   "
+                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal mr-4  lg:font-bold lg:text-lg   "
               >
                 Login
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/signup"
-                className=" md:px-4 lg:px-8 text-primary md:font-normal   lg:font-bold lg:text-lg  rounded-full bg-second hover:bg-bgl py-2  "
+                className=" md:px-4 lg:px-8 ttext-tx md:font-normal   lg:font-bold lg:text-lg  rounded-full bg-primary hover:bg-ty py-2  "
               >
                 Signup
               </NavLink>
             </div>
             <a
               onClick={() => setShowMenu(true)}
-              className="py-2 md:px-4 lg:px-6 text-primary md:font-normal mr-4  lg:font-medium lg:text-lg md:hidden"
+              className="py-2 md:px-4 lg:px-6 text-primary md:font-normal cursor-pointer  lg:font-medium lg:text-lg md:hidden"
             >
-              <img src="/menu.svg" alt="" className="w-[24px]" />
+              <img src="/menu.svg" alt="" className="w-[30px]" />
             </a>
           </div>
         </div>
       </div>
       <div
-        className={`w-[80vw] z-10 absolute top-0 bg-[#F4FCFC] opacity-200 h-[100vh] right-0 ${
+        className={`w-[80vw] z-10 absolute top-0 bg-[#F4FCFC] opacity-200 h-[100vh] overflow-x-hidden right-0 ${
           showMenu ? "block" : "hidden"
         }`}
       >
         <div
-          className="w-full mt-6 justify-start ml-4 flex items-center"
+          className="w-full mt-6 justify-start ml-4 cursor-pointer flex items-center"
           onClick={() => setShowMenu(false)}
         >
           <img src="/close.svg" className="w-[24px]" alt="" />
@@ -63,25 +63,29 @@ const Navbar = () => {
         <div className="flex flex-col gap-2 mt-4">
           <NavLink
             to="/hunters"
-            className="text-primary ml-4 mt-2 pl-4 border-b-2 py-2 "
+            onClick={() => setShowMenu((prev) => !prev)}
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Find Talent
           </NavLink>
           <NavLink
             to="/jobs"
-            className="text-primary ml-4 mt-2 pl-4 border-b-2 py-2 "
+            onClick={() => setShowMenu((prev) => !prev)}
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Jobs
           </NavLink>
           <NavLink
             to="/login"
-            className="text-primary ml-4 mt-2 pl-4 border-b-2 py-2 "
+            onClick={() => setShowMenu((prev) => !prev)}
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Login
           </NavLink>
           <NavLink
             to="/signup"
-            className="text-primary ml-4 mt-2 pl-4 border-b-2 py-2 "
+            onClick={() => setShowMenu((prev) => !prev)}
+            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Signup
           </NavLink>
