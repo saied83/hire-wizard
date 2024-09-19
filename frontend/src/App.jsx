@@ -1,6 +1,20 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Navbar from "./components/Navbar";
+import {
+  CreateJob,
+  EditHunter,
+  EditJob,
+  EditRecruiter,
+  Home,
+  Hunters,
+  Jobs,
+  NotFound,
+  RecruiterProfile,
+  Signup,
+  SingleHunter,
+  Login,
+  SingleJob,
+} from "./pages";
+import { Navbar } from "./components";
 
 function App() {
   return (
@@ -11,22 +25,22 @@ function App() {
           <Route path="/" element={<Home />} />
 
           {/* Jobs  */}
-          <Route path="/jobs" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/jobs/create" element={<CreateJob />} />
+          <Route path="/jobs/edit/:jobId" element={<EditJob />} />
+          <Route path="/jobs/:jobId" element={<SingleJob />} />
+
+          {/* Hunter  */}
+          <Route path="/hunters" element={<Hunters />} />
+          <Route path="/hunters/:username" element={<SingleHunter />} />
+          <Route path="/hunters/edit/:username" element={<EditHunter />} />
+
+          {/* Recruiter  */}
+          <Route path="/recruiters/:username" element={<RecruiterProfile />} />
+          <Route path="/recruiter/edit/:username" element={<EditRecruiter />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </div>
