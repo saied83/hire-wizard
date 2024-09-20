@@ -13,6 +13,7 @@ import {
   SingleHunter,
   Login,
   SingleJob,
+  RecruiterDashboard,
 } from "./pages";
 import { LoggedNav, Navbar } from "./components";
 
@@ -38,7 +39,16 @@ function App() {
 
           {/* Recruiter  */}
           <Route path="/recruiters/:username" element={<RecruiterProfile />} />
-          <Route path="/recruiter/edit/:username" element={<EditRecruiter />} />
+          <Route
+            path="/recruiters/edit/:username"
+            element={<EditRecruiter />}
+          />
+          <Route
+            path="//recruiters/dashboard"
+            element={<RecruiterDashboard />}
+          />
+
+          {/* Auth  */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />

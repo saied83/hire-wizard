@@ -12,7 +12,7 @@ import RecruiterProfile from "./RecruiterProfile.jsx";
 import SingleHunter from "./SingleHunter.jsx";
 import SingleJob from "./SingleJob.jsx";
 import NotFound from "./NotFound.jsx";
-import HunterDashboard from "./HunterDashboard.jsx";
+
 import RecruiterDashboard from "./RecruiterDashboard.jsx";
 
 export {
@@ -29,6 +29,5 @@ export {
   SingleHunter,
   SingleJob,
   NotFound,
-  HunterDashboard,
   RecruiterDashboard,
 };

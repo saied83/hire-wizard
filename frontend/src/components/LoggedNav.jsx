@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const LoggedNav = () => {
   const [showMenu, setShowMenu] = useState(false);
   return (
-    <div className="w-full h-[70px] relative bg-second  ">
+    <div className="w-full  relative bg-second  ">
       <div>
         <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
           <div className="flex justify-between items-center py-2 ">
@@ -14,14 +14,14 @@ const LoggedNav = () => {
             <div className="hidden md:inline-flex ">
               {" "}
               <NavLink
-                to="/hunters"
+                to="/recruiters/dashboard"
                 className="py-2  md:px-4 lg:px-6 text-tx md:font-normal lg:font-medium lg:text-lg   "
               >
                 Dashboard
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
-                to="/hunters"
+                to="/hunters/"
                 className="py-2  md:px-4 lg:px-6 text-tx md:font-normal  lg:font-medium lg:text-lg   "
               >
                 Find Talent

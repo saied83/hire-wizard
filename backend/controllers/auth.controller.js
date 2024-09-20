@@ -204,6 +204,7 @@ export const login = async (req, res) => {
     if (data2[0].length > 0) {
       isRecruiter = true;
     }
+    generateTokenAndSetCookie(username, res);
 
     res.status(200).json({
       status: "success",
