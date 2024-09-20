@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-const LoggedNav = () => {
+const UnAuthNav = () => {
   const [showMenu, setShowMenu] = useState(false);
   return (
-    <div className="w-full  relative bg-second  ">
+    <div className="w-full h-[70px] relative bg-second  ">
       <div>
         <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
           <div className="flex justify-between items-center py-2 ">
@@ -12,40 +13,32 @@ const LoggedNav = () => {
               <img src="/logo.png" alt="" className="w-[200px] h-auto" />
             </NavLink>
             <div className="hidden md:inline-flex ">
-              {" "}
               <NavLink
-                to="/recruiters/dashboard"
-                className="py-2  md:px-4 lg:px-6 text-tx md:font-normal lg:font-medium lg:text-lg   "
-              >
-                Dashboard
-                <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
-              </NavLink>
-              <NavLink
-                to="/hunters/"
-                className="py-2  md:px-4 lg:px-6 text-tx md:font-normal  lg:font-medium lg:text-lg   "
+                to="/hunters"
+                className="py-2  md:px-4 lg:px-6 text-tx md:font-normal mr-2  lg:font-bold lg:text-lg   "
               >
                 Find Talent
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/jobs"
-                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal  lg:font-medium lg:text-lg   "
+                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal mr-2  lg:font-bold lg:text-lg   "
               >
                 Jobs
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/login"
-                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal lg:font-medium lg:text-lg   "
+                className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal mr-2  lg:font-bold lg:text-lg   "
               >
                 Login
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
                 to="/signup"
-                className=" md:px-4 lg:px-8   lg:font-medium lg:text-lg  rounded-full hover:bg-red-400 hover:text-black text-white bg-tx py-2  "
+                className=" md:px-4 lg:px-8 ttext-tx md:font-normal   lg:font-bold lg:text-lg  rounded-full bg-primary hover:bg-ty py-2  "
               >
-                Logout
+                Signup
               </NavLink>
             </div>
             <a
@@ -72,28 +65,28 @@ const LoggedNav = () => {
           <NavLink
             to="/hunters"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-tx font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Find Talent
           </NavLink>
           <NavLink
             to="/jobs"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-tx font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Jobs
           </NavLink>
           <NavLink
             to="/login"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-tx font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Login
           </NavLink>
           <NavLink
             to="/signup"
             onClick={() => setShowMenu((prev) => !prev)}
-            className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
+            className="text-black font-medium ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
             Signup
           </NavLink>
@@ -103,4 +96,4 @@ const LoggedNav = () => {
   );
 };
 
-export default LoggedNav;
+export default UnAuthNav;
