@@ -23,6 +23,7 @@ const useLogout = () => {
       toast.error(error.message);
     } finally {
       setLoading(false);
+      toast.success("Logout successfully!");
     }
   };
   return { loading, logout };

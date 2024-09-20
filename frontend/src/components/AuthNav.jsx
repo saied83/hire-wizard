@@ -6,27 +6,27 @@ import useLogout from "../hooks/useLogout";
 const AuthNav = () => {
   const { authUser } = useAuthContext();
   const links = {
-    hunter: {
-      first: { title: "Find Jobs", link: `/jobs` },
-      second: { title: "My Profile", link: `/hunters/${authUser?.username}` },
-      third: {
+    hunter: [
+      { title: "Find Jobs", link: `/jobs` },
+      { title: "H Profile", link: `/hunters/${authUser?.username}` },
+      {
         title: "Edit Profile",
         link: `/hunters/edit/${authUser?.username}`,
       },
-      forth: {
+      {
         title: "As Recruiter",
         link: `/recruiters/${authUser?.username}`,
       },
-    },
-    recruiter: {
-      first: { title: "Find Hunter", link: `/hunters` },
-      second: {
-        title: "My Profile",
+    ],
+    recruiter: [
+      { title: "Find Hunter", link: `/hunters` },
+      {
+        title: "R Profile",
         link: `/recruiters/dashboard/${authUser?.username}`,
       },
-      third: { title: "As Hunter", link: `/hunters/${authUser?.username}` },
-      forth: { title: "Create Job", link: `/jobs/create` },
-    },
+      { title: "Create Job", link: `/jobs/create` },
+      { title: "As Hunter", link: `/hunters/${authUser?.username}` },
+    ],
   };
 
   const [showMenu, setShowMenu] = useState(false);
@@ -34,6 +34,7 @@ const AuthNav = () => {
   const navigate = useNavigate();
   const { loading, logout } = useLogout();
   const [type, setType] = useState(true);
+  const [menu, setMenu] = useState(links.recruiter);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -41,12 +42,12 @@ const AuthNav = () => {
     await logout();
     navigate("/login");
   };
-  let menu = links.recruiter;
+
   useEffect(() => {
     if (!type) {
-      menu = links.hunter;
+      setMenu(links.hunter);
     } else {
-      menu = links.recruiter;
+      setMenu(links.recruiter);
     }
   }, [type]);
 
@@ -61,32 +62,34 @@ const AuthNav = () => {
             <div className="hidden md:inline-flex ">
               {" "}
               <NavLink
-                to={menu.first.link}
+                to={menu[0].link}
                 className="py-2  md:px-4 lg:px-6 text-tx md:font-normal lg:font-medium lg:text-lg   "
               >
-                {menu.first.title}
+                {menu[0].title}
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
-                to={menu.second.link}
+                to={menu[1].link}
                 className="py-2  md:px-4 lg:px-6 text-tx md:font-normal  lg:font-medium lg:text-lg   "
               >
-                {menu.second.title}
+                {menu[1].title}
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
-                to={menu.third.link}
-                onClick={() => setType((prev) => !prev)}
+                to={menu[2].link}
                 className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal  lg:font-medium lg:text-lg   "
               >
-                {menu.third.title}
+                {menu[2].title}
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <NavLink
-                to={menu.forth.link}
+                to={menu[3].link}
+                onClick={() => {
+                  setType((prev) => !prev);
+                }}
                 className="py-2 md:px-4 lg:px-6 text-tx  md:font-normal lg:font-medium lg:text-lg   "
               >
-                {menu.forth.title}
+                {menu[3].title}
                 <hr className="w-full outline-none border-[1.5px] border-gray-500 hidden" />
               </NavLink>
               <button
@@ -118,32 +121,35 @@ const AuthNav = () => {
         </div>
         <div className="flex flex-col gap-2 mt-4">
           <NavLink
-            to={menu.first.link}
+            to={menu[0].link}
             onClick={() => setShowMenu((prev) => !prev)}
             className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
-            {menu.first.title}
+            {menu[0].title}
           </NavLink>
           <NavLink
-            to={menu.second.link}
+            to={menu[1].link}
             onClick={() => setShowMenu((prev) => !prev)}
             className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
-            {menu.second.title}
+            {menu[1].title}
           </NavLink>
           <NavLink
-            to={menu.third.link}
+            to={menu[2].link}
             onClick={() => setShowMenu((prev) => !prev)}
             className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
-            {menu.third.title}
+            {menu[2].title}
           </NavLink>
           <NavLink
-            to={menu.forth.link}
-            onClick={() => setShowMenu((prev) => !prev)}
+            to={menu[3].link}
+            onClick={() => {
+              setShowMenu((prev) => !prev);
+              setType((prev) => !prev);
+            }}
             className="text-tx font-semibold ml-4 mt-2 pl-4 border-b-2 py-2 "
           >
-            {menu.forth.title}
+            {menu[3].title}
           </NavLink>
           <button
             onClick={handleLogout}

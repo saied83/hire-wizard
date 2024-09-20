@@ -4,5 +4,14 @@ import JobCard from "./JobCard";
 import RDashboard from "./RDashboard";
 import UnAuthNav from "./UnAuthNav";
 import AuthNav from "./AuthNav";
+import SingleRecruiter from "./SingleRecruiter";
 
-export { Navbar, Spinner, JobCard, RDashboard, UnAuthNav, AuthNav };
+export {
+  SingleRecruiter,
+  Navbar,
+  Spinner,
+  JobCard,
+  RDashboard,
+  UnAuthNav,
+  AuthNav,
+};

@@ -64,14 +64,15 @@ const useSignup = () => {
       setAuthUser(data.data);
 
       if (type === "recruiter") {
-        navigate(`/recruiters/edit/:${data.data.username}`);
+        navigate(`/recruiters/edit/${data.data.username}`);
       } else {
-        navigate(`/hunters/edit/:${data.data.username}`);
+        navigate(`/hunters/edit/${data.data.username}`);
       }
     } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
+      toast(`Now create your ${type} account`);
     }
   };
   return { loading, signup };

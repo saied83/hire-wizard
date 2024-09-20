@@ -32,14 +32,8 @@ function App() {
 
           {/* Jobs  */}
           <Route path="/jobs" element={<Jobs />} />
-          <Route
-            path="/jobs/create"
-            element={authUser?.isRecruiter && <CreateJob />}
-          />
-          <Route
-            path="/jobs/edit/:jobId"
-            element={authUser?.isRecruiter && <EditJob />}
-          />
+          <Route path="/jobs/create" element={authUser && <CreateJob />} />
+          <Route path="/jobs/edit/:jobId" element={authUser && <EditJob />} />
           <Route path="/jobs/:jobId" element={<SingleJob />} />
 
           {/* Hunter  */}
@@ -47,21 +41,21 @@ function App() {
           <Route path="/hunters/:username" element={<SingleHunter />} />
           <Route
             path="/hunters/edit/:username"
-            element={authUser?.isHunter && <EditHunter />}
+            element={authUser && <EditHunter />}
           />
 
           {/* Recruiter  */}
           <Route
             path="/recruiters/:username"
-            element={authUser?.isRecruiter && <RecruiterProfile />}
+            element={authUser && <RecruiterProfile />}
           />
           <Route
             path="/recruiters/edit/:username"
-            element={authUser?.isRecruiter && <EditRecruiter />}
+            element={authUser && <EditRecruiter />}
           />
           <Route
             path="/recruiters/dashboard/:username"
-            element={authUser?.isRecruiter && <RecruiterDashboard />}
+            element={authUser && <RecruiterDashboard />}
           />
 
           {/* Auth  */}
