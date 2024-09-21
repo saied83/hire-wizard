@@ -17,7 +17,7 @@ import {
   CreateHunter,
   CreateRecruiter,
 } from "./pages";
-import { Navbar } from "./components";
+import { Footer, Navbar } from "./components";
 import { useAuthContext } from "./context/AuthContext";
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
 
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Hunters />} />
 
           {/* Hunter  */}
           <Route path="/hunters" element={<Hunters />} />
@@ -72,6 +72,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }

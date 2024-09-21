@@ -4,6 +4,7 @@ import JobCard from "./JobCard";
 import Rdashboard from "./Rdashboard";
 import UnAuthNav from "./UnAuthNav";
 import AuthNav from "./AuthNav";
+import Footer from "./Footer";
 
 import JobHunterCard from "./JobHunterCard";
 
@@ -15,4 +16,5 @@ export {
   AuthNav,
   JobHunterCard,
   Rdashboard,
+  Footer,
 };

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 
 const CreateJob = () => {
   const navigate = useNavigate();
+  const { authUser } = useAuthContext();
   const [job, setJob] = useState({
     description: "",
     job_title: "",
@@ -41,7 +43,7 @@ const CreateJob = () => {
         skills: allSkill,
       }),
     });
-    navigate("/jobs");
+    navigate(`/jobs`);
   };
 
   return (

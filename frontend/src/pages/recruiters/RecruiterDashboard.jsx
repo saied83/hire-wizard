@@ -2,8 +2,10 @@ import React, { useState } from "react";
 
 import RecruiterProfile from "./RecruiterProfile";
 import Rdashboard from "../../components/Rdashboard";
+import { useParams } from "react-router-dom";
 
 const RecruiterDashboard = () => {
+  const { username } = useParams();
   const [menu, setMenu] = useState(true);
   return (
     <>
@@ -23,8 +25,8 @@ const RecruiterDashboard = () => {
           Profile
         </button>
       </nav>
-      <div className="min-h-screen  py-8 px-4 sm:px-6 lg:px-8">
-        {menu ? <Rdashboard /> : <RecruiterProfile />}
+      <div className="min-h-screen  pb-8 px-4 sm:px-6 lg:px-8">
+        {menu ? <Rdashboard user={username} /> : <RecruiterProfile />}
       </div>
     </>
   );

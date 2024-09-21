@@ -3,12 +3,37 @@ import { JobCard } from "../../components";
 import { useDataContext } from "../../context/useData";
 
 const Jobs = () => {
-  const { jobs } = useDataContext();
   const [filterJobs, setFilterJobs] = useState([]);
-  console.log(jobs);
+  const [search, setSearch] = useState("");
+
+  const jobLoad = async () => {
+    try {
+      const res = await fetch(`/api/v1/jobs/all`);
+      const data = await res.json();
+      setFilterJobs(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    setFilterJobs(jobs);
+    jobLoad();
   }, []);
+
+  const applyFilter = () => {
+    let filterJ = filterJobs.slice();
+    if (search.length > 0) {
+      filterJ = filterJ.filter((job) =>
+        job.job_title.toLowerCase().includes(search.toLowerCase())
+      );
+    } else {
+    }
+    setFilterJobs(filterJ);
+  };
+  useEffect(() => {
+    applyFilter();
+  }, [search]);
+
   return (
     <div className="container mx-auto p-6">
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -22,6 +47,8 @@ const Jobs = () => {
           <input
             type="text"
             id="searchBar"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search for jobs..."
             className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
