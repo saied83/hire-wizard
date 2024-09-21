@@ -1,6 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const EditJob = () => {
+const CreateJob = () => {
+  const navigate = useNavigate();
+  const [job, setJob] = useState({
+    description: "",
+    job_title: "",
+    location: "",
+    salary: "",
+    year_exp: "",
+    apply_limit: "",
+    deadline: "",
+    skills: [],
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setJob((prevProfile) => ({
+      ...prevProfile,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const allSkill = job.skills.split(",");
+    await fetch(`/api/v1/jobs/create`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        description: job.description,
+        job_title: job.job_title,
+        location: job.location,
+        salary: job.salary,
+        year_exp: job.year_exp,
+        apply_limit: job.apply_limit,
+        deadline: job.deadline,
+        skills: allSkill,
+      }),
+    });
+    navigate("/jobs");
+  };
+
   return (
     <>
       <section className="bg-indigo-50">
@@ -8,7 +51,7 @@ const EditJob = () => {
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
             <form>
               <h2 className="text-3xl text-center font-semibold mb-6">
-                Edit Job
+                Add Job
               </h2>
 
               <div className="mb-4">
@@ -21,7 +64,9 @@ const EditJob = () => {
                 <input
                   type="text"
                   id="title"
-                  name="title"
+                  name="job_title"
+                  value={job.job_title}
+                  onChange={handleChange}
                   className="border rounded w-full py-2 px-3 mb-2"
                   placeholder="eg. Beautiful Apartment In Miami"
                   required
@@ -39,6 +84,8 @@ const EditJob = () => {
                   name="description"
                   className="border rounded w-full py-2 px-3"
                   rows="4"
+                  value={job.description}
+                  onChange={handleChange}
                   placeholder="Add any job duties, expectations, requirements, etc"
                   required
                 ></textarea>
@@ -56,6 +103,9 @@ const EditJob = () => {
                       type="number"
                       className="border rounded w-full py-2 px-3 mb-2"
                       required
+                      name="salary"
+                      value={job.salary}
+                      onChange={handleChange}
                       placeholder="$80000"
                     />
                   </div>
@@ -65,7 +115,9 @@ const EditJob = () => {
                     </label>
                     <input
                       type="number"
-                      name="limit"
+                      name="apply_limit"
+                      value={job.apply_limit}
+                      onChange={handleChange}
                       placeholder="50"
                       className="border rounded w-full py-2 px-3 mb-2"
                       required
@@ -81,6 +133,8 @@ const EditJob = () => {
                 <input
                   type="text"
                   id="location"
+                  value={job.location}
+                  onChange={handleChange}
                   name="location"
                   className="border rounded w-full py-2 px-3 mb-2"
                   placeholder="Company Location"
@@ -96,6 +150,8 @@ const EditJob = () => {
                     <input
                       type="number"
                       id="year_exp"
+                      value={job.year_exp}
+                      onChange={handleChange}
                       name="year_exp"
                       className="border rounded w-full py-2 px-3 mb-2"
                       placeholder="3 Years"
@@ -110,6 +166,8 @@ const EditJob = () => {
                       type="date"
                       id="date"
                       name="deadline"
+                      value={job.deadline}
+                      onChange={handleChange}
                       className="border rounded w-full py-2 px-3 mb-2"
                       required
                     />
@@ -124,6 +182,8 @@ const EditJob = () => {
                   type="text"
                   id="skills"
                   name="skills"
+                  value={job.skills}
+                  onChange={handleChange}
                   className="border rounded w-full py-2 px-3 mb-2"
                   placeholder="javascript, python, c#"
                   required
@@ -132,10 +192,11 @@ const EditJob = () => {
 
               <div>
                 <button
+                  onClick={handleSubmit}
                   className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
-                  Update Job
+                  Add Job
                 </button>
               </div>
             </form>
@@ -146,4 +207,4 @@ const EditJob = () => {
   );
 };
 
-export default EditJob;
+export default CreateJob;

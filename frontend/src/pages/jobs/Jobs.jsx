@@ -1,7 +1,14 @@
-import React from "react";
-import { JobCard } from "../components";
+import React, { useEffect, useState } from "react";
+import { JobCard } from "../../components";
+import { useDataContext } from "../../context/useData";
 
 const Jobs = () => {
+  const { jobs } = useDataContext();
+  const [filterJobs, setFilterJobs] = useState([]);
+  console.log(jobs);
+  useEffect(() => {
+    setFilterJobs(jobs);
+  }, []);
   return (
     <div className="container mx-auto p-6">
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
@@ -15,16 +22,13 @@ const Jobs = () => {
           <input
             type="text"
             id="searchBar"
-            placeholder="Search htmlFor jobs..."
+            placeholder="Search for jobs..."
             className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <div className="mt-6 flex flex-col gap-4 w-full">
-            <JobCard />
-            <JobCard />
-            <JobCard />
-            <JobCard />
-            <JobCard />
-            <JobCard />
+            {filterJobs.map((job, indx) => (
+              <JobCard key={indx} job={job} />
+            ))}
           </div>
         </div>
 

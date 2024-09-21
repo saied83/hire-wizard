@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import useSignup from "../hooks/useSignup";
+
+import useSignup from "../../hooks/useSignup";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -9,7 +9,7 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [type, setType] = useState("Recruiter");
+  const [userType, setType] = useState("recruiter");
   const [gender, setGender] = useState("male");
   const [bio, setBio] = useState("");
   const [phone, setPhone] = useState("");
@@ -23,7 +23,7 @@ const Signup = () => {
     username,
     password,
     confirmPassword,
-    type,
+    userType,
     gender,
     bio,
     phone,
@@ -31,7 +31,6 @@ const Signup = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(newUser);
     await signup(newUser);
   };
 
@@ -100,6 +99,7 @@ const Signup = () => {
             <select
               className="py-2 px-4 text-lg text-tx bg-white  rounded-lg w-full"
               required
+              value={userType}
               onChange={(e) => setType(e.target.value)}
             >
               <option value="recruiter">Recruiter</option>

@@ -3,7 +3,6 @@ import { Toaster } from "react-hot-toast";
 import {
   CreateJob,
   EditHunter,
-  EditJob,
   EditRecruiter,
   Home,
   Hunters,
@@ -15,6 +14,8 @@ import {
   Login,
   SingleJob,
   RecruiterDashboard,
+  CreateHunter,
+  CreateRecruiter,
 } from "./pages";
 import { Navbar } from "./components";
 import { useAuthContext } from "./context/AuthContext";
@@ -30,21 +31,28 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
 
-          {/* Jobs  */}
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/jobs/create" element={authUser && <CreateJob />} />
-          <Route path="/jobs/edit/:jobId" element={authUser && <EditJob />} />
-          <Route path="/jobs/:jobId" element={<SingleJob />} />
-
           {/* Hunter  */}
           <Route path="/hunters" element={<Hunters />} />
           <Route path="/hunters/:username" element={<SingleHunter />} />
           <Route
-            path="/hunters/edit/:username"
+            path="/hunters/edit/:userName"
             element={authUser && <EditHunter />}
           />
+          <Route
+            path="/hunters/create/:username"
+            element={authUser && <CreateHunter />}
+          />
+
+          {/* Jobs  */}
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/jobs/create" element={authUser && <CreateJob />} />
+          <Route path="/jobs/:jobId" element={<SingleJob />} />
 
           {/* Recruiter  */}
+          <Route
+            path="recruiters/create/:username"
+            element={authUser && <CreateRecruiter />}
+          />
           <Route
             path="/recruiters/:username"
             element={authUser && <RecruiterProfile />}
@@ -59,8 +67,8 @@ function App() {
           />
 
           {/* Auth  */}
-          <Route path="/login" element={authUser ? <></> : <Login />} />
-          <Route path="/signup" element={authUser ? <></> : <Signup />} />
+          <Route path="/login" element={authUser ? <Jobs /> : <Login />} />
+          <Route path="/signup" element={authUser ? <Jobs /> : <Signup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

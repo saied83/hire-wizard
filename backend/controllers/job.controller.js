@@ -23,9 +23,17 @@ const getSingleJob = async (req, res) => {
       [jobId]
     );
 
+    const recRes = await mysqlPool.query(
+      `SELECT c_city, c_name FROM Recruiter WHERE r_username=?`,
+      [job.r_username]
+    );
+    const company = recRes[0][0];
+
     const singleJob = {
       ...job,
       skills,
+      c_name: company.c_name,
+      c_city: company.c_city,
       applicant: applicantData[0],
     };
 

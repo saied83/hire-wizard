@@ -10,14 +10,14 @@ import {
 
 const router = express.Router();
 
-router.post("/add", protectRoute, addHunter);
+router.post("/add/:username", protectRoute, addHunter);
 
 router.get("/all", protectRoute, getAllHunter);
 
-router.get("/:username", protectRoute, getSingleHunter);
+router.get("/single/:username", protectRoute, getSingleHunter);
 
-router.put("/profile/edit", protectRoute, updateHunterProfile);
+router.put("/profile/edit/:username", protectRoute, updateHunterProfile);
 
-router.delete("/profile/delete/", protectRoute, deleteHunter);
+router.delete("/profile/delete/:username", protectRoute, deleteHunter);
 
 export default router;

@@ -15,7 +15,7 @@ const useSignup = () => {
     username,
     password,
     confirmPassword,
-    type,
+    userType,
     gender,
     bio,
     phone,
@@ -28,7 +28,8 @@ const useSignup = () => {
       username,
       password,
       confirmPassword,
-      type,
+      userType,
+
       gender,
       bio,
       phone,
@@ -63,16 +64,16 @@ const useSignup = () => {
       localStorage.setItem("user-info", JSON.stringify(data.data));
       setAuthUser(data.data);
 
-      if (type === "recruiter") {
-        navigate(`/recruiters/edit/${data.data.username}`);
+      if (userType.toLowerCase() === "recruiter") {
+        navigate(`/recruiters/create/${data.data.username}`);
       } else {
-        navigate(`/hunters/edit/${data.data.username}`);
+        navigate(`/hunters/create/${data.data.username}`);
       }
+      toast.success(`Now create your ${userType} account`);
     } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
-      toast(`Now create your ${type} account`);
     }
   };
   return { loading, signup };
@@ -85,7 +86,8 @@ const handleInputErrors = ({
   username,
   password,
   confirmPassword,
-  type,
+  userType,
+
   gender,
   bio,
   phone,
@@ -99,7 +101,7 @@ const handleInputErrors = ({
     !password ||
     !confirmPassword ||
     !gender ||
-    !type ||
+    !userType ||
     !bio ||
     !phone ||
     !dob

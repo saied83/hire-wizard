@@ -4,7 +4,7 @@ const addRecruiter = async (req, res) => {
   try {
     const { c_city, c_zip, c_street, c_country, c_name, designation } =
       req.body;
-    const user_name = req.user.username;
+    const user_name = req.params.username;
 
     // check existing job hunter user
 
@@ -85,13 +85,11 @@ const getAllRecruiter = async (req, res) => {
       };
     });
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "parse all recruiter information successfully",
-        data: hunterProfile,
-      });
+    res.status(200).json({
+      status: "success",
+      message: "parse all recruiter information successfully",
+      data: hunterProfile,
+    });
   } catch (error) {
     console.log("Error in getAllRecruiter controller", error.message);
     res.status(500).json({ status: "failure", error: "Internal Server Error" });
@@ -109,10 +107,16 @@ const getSingleRecruiter = async (req, res) => {
     );
 
     const userProfileData = profileData[0];
-    if (!userProfileData) {
+    const data = await mysqlPool.query(
+      `SELECT username, password, bio, email, phone_no, time_stamp, first_name, last_name, dob, profile_pic, gender FROM User WHERE username=?`,
+      [user_name]
+    );
+
+    const user = data[0][0];
+    if (userProfileData.length <= 0) {
       return res
-        .status(404)
-        .json({ status: "failure", error: "No record found" });
+        .status(200)
+        .json({ status: "failure", error: "No record found", data: user });
     }
     const recruiterData = userProfileData[0];
 
@@ -137,13 +141,11 @@ const getSingleRecruiter = async (req, res) => {
       },
     };
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "parse recruiter info successfully",
-        data: Recruiter,
-      });
+    res.status(200).json({
+      status: "success",
+      message: "parse recruiter info successfully",
+      data: Recruiter,
+    });
   } catch (error) {
     console.log("Error in getSingleHunter controller", error.message);
     res
@@ -156,7 +158,7 @@ const updateRecruiterProfile = async (req, res) => {
   try {
     const { c_city, c_zip, c_street, c_country, c_name, designation } =
       req.body;
-    const user_name = req.user.username;
+    const user_name = req.params.username;
 
     // check existing job hunter user
 
@@ -206,7 +208,7 @@ const updateRecruiterProfile = async (req, res) => {
 
 const deleteRecruiter = async (req, res) => {
   try {
-    const user_name = req.user.username;
+    const user_name = req.params.username;
 
     const data = await mysqlPool.query(
       `SELECT r_username FROM Recruiter WHERE r_username = ?`,

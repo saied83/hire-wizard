@@ -11,7 +11,15 @@ const addHunter = async (req, res) => {
       skills,
       projects,
     } = req.body;
-    const user_name = req.user.username;
+    const userName = req.user.username;
+    const user_name = req.params.username;
+
+    if (userName !== user_name) {
+      return res.status(304).json({
+        success: "failure",
+        error: "Access Denied",
+      });
+    }
 
     // check existing job hunter user
 
@@ -107,13 +115,11 @@ const getAllHunter = async (req, res) => {
       await hunterProfile[i].then((data) => jobHunters.push(data));
     }
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "parse all job hunter successfully",
-        data: jobHunters,
-      });
+    res.status(200).json({
+      status: "success",
+      message: "parse all job hunter successfully",
+      data: jobHunters,
+    });
   } catch (error) {
     console.log("Error in getAllHunter controller", error.message);
     res.status(500).json({ status: "failure", error: "Internal Server Error" });
@@ -129,12 +135,20 @@ const getSingleHunter = async (req, res) => {
             SELECT j.h_username, u.bio, u.email, u.phone_no, u.time_stamp, u.first_name, u.last_name, u.dob, u.gender, u.profile_pic, h_city, h_street, h_zip_code, h_country, h_working_role FROM JobHunter j JOIN User u on u.username=j.h_username WHERE h_username=?`,
       [user_name]
     );
+    const data = await mysqlPool.query(
+      `SELECT username, password, bio, email, phone_no, time_stamp, first_name, last_name, dob, profile_pic, gender FROM User WHERE username=?`,
+      [user_name]
+    );
+
+    const user = data[0][0];
 
     const userProfileData = profileData[0];
-    if (!userProfileData) {
-      return res
-        .status(404)
-        .json({ status: "failure", error: "No record found" });
+    if (userProfileData.length <= 0) {
+      return res.status(200).json({
+        status: "success",
+        error: "No hunter record found",
+        data: user,
+      });
     }
 
     const skillData = await mysqlPool.query(
@@ -171,6 +185,7 @@ const getSingleHunter = async (req, res) => {
 
 const updateHunterProfile = async (req, res) => {
   try {
+    const user_name = req.params.username;
     const {
       h_city,
       h_zip_code,
@@ -180,7 +195,6 @@ const updateHunterProfile = async (req, res) => {
       skills,
       projects,
     } = req.body;
-    const user_name = req.user.username;
 
     // check existing job hunter user
 
@@ -256,7 +270,7 @@ const updateHunterProfile = async (req, res) => {
 
 const deleteHunter = async (req, res) => {
   try {
-    const user_name = req.user.username;
+    const user_name = req.params.username;
 
     const data = await mysqlPool.query(
       `SELECT h_username FROM JobHunter WHERE h_username = ?`,
@@ -277,12 +291,10 @@ const deleteHunter = async (req, res) => {
         user_name,
       ]);
       await connection.commit();
-      return res
-        .status(200)
-        .json({
-          status: "success",
-          message: "Hunter User delete successfully",
-        });
+      return res.status(200).json({
+        status: "success",
+        message: "Hunter User delete successfully",
+      });
     } catch (error) {
       await connection.rollback();
       mysqlPool.releaseConnection();

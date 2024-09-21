@@ -21,7 +21,7 @@ const AuthNav = () => {
     recruiter: [
       { title: "Find Hunter", link: `/hunters` },
       {
-        title: "R Profile",
+        title: "R Dashboard",
         link: `/recruiters/dashboard/${authUser?.username}`,
       },
       { title: "Create Job", link: `/jobs/create` },

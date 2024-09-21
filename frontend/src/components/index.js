@@ -1,17 +1,18 @@
 import Navbar from "./Navbar";
 import Spinner from "./Spinner";
 import JobCard from "./JobCard";
-import RDashboard from "./RDashboard";
+import Rdashboard from "./Rdashboard";
 import UnAuthNav from "./UnAuthNav";
 import AuthNav from "./AuthNav";
-import SingleRecruiter from "./SingleRecruiter";
+
+import JobHunterCard from "./JobHunterCard";
 
 export {
-  SingleRecruiter,
   Navbar,
   Spinner,
   JobCard,
-  RDashboard,
   UnAuthNav,
   AuthNav,
+  JobHunterCard,
+  Rdashboard,
 };
