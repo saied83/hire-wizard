@@ -238,4 +238,4 @@ http://localhost:8000
 
 ## Database Schema
 
-![](https://github.com/saied83/hire-wizard/blob/main/hire-wizard-schema-v2.png?raw=true)
+![](https://github.com/saied83/hire-wizard/blob/main/hire-wizerd-schema-v2.png?raw=true)
